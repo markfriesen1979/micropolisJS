@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Full-screen, mobile-friendly -->
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Tron City – Friesen Ventures</title>
+
+  <!-- Original Micropolis CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Mobile overrides -->
+  <style>
+    html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+    #game-container { position:relative; width:100vw; height:100vh; touch-action:none; }
+    #game-container canvas { width:100%; height:100%; display:block; }
+    #game-menu {
+      position:absolute; top:8px; right:8px; display:flex; gap:8px;
+      background:rgba(255,255,255,0.9); padding:4px 8px; border-radius:4px; z-index:1000;
+    }
+    #game-menu button, #game-menu a {
+      padding:6px 10px; border:none; border-radius:4px;
+      background:#eee; text-decoration:none; font-size:1em;
+    }
+    #credits {
+      position:absolute; bottom:8px; left:8px;
+      background:rgba(255,255,255,0.9); padding:6px 10px; border-radius:4px; z-index:1000;
+      font-size:0.85em;
+    }
+    #credits a { font-weight:bold; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <!-- Where the game engine will attach its canvas -->
+  <div id="game-container"></div>
+
+  <!-- Save / Load / Donate -->
+  <nav id="game-menu">
+    <button onclick="saveGame()">💾 Save</button>
+    <button onclick="loadGame()">📂 Load</button>
+    <a href="mailto:markfriesen2014@gmail.com" target="_blank">💖 Donate</a>
+  </nav>
+
+  <!-- Friesen Ventures credit -->
+  <div id="credits">
+    <p>Built by Friesen Ventures</p>
+    <p>Donate: <a href="mailto:markfriesen2014@gmail.com">markfriesen2014@gmail.com</a></p>
+  </div>
+
+  <!-- MicropolisJS engine (built bundle) -->
+  <script src="dist/micropolis.js"></script>
+
+  <script>
+    // tiny helper for on-screen notifications
+    function notify(msg) {
+      if (typeof showNotification === 'function') showNotification(msg);
+      else alert(msg);
+    }
+
+    window.addEventListener('load', () => {
+      // 1) Inject new buildings
+      if (Array.isArray(window.BUILDINGS)) {
+        BUILDINGS.push(
+          { id:'stockExchange',  name:'Stock Exchange', cost:20000, unlocked:true },
+          { id:'mayorsHome',     name:"Mayor’s Home",   cost:15000, unlocked:true },
+          { id:'amusementPark',  name:'Amusement Park', cost:50000, unlocked:false }
+        );
+      }
+
+      // 2) Auto-unlock Amusement Park after 10 parks
+      function tryUnlock() {
+        const parkCount = (window.gameState?.buildings||[]).filter(b=>b.id==='park').length;
+        const amp = BUILDINGS.find(b=>b.id==='amusementPark');
+        if (amp && !amp.unlocked && parkCount >= 10) {
+          amp.unlocked = true;
+          notify("🎉 Amusement Park unlocked!");
+        }
+      }
+      if (typeof placeBuilding === 'function') {
+        const orig = placeBuilding;
+        window.placeBuilding = id => {
+          orig(id);
+          if (id==='park') tryUnlock();
+        };
+      }
+
+      // 3) Save & Load via localStorage
+      window.saveGame = () => {
+        localStorage.setItem('simcityState', JSON.stringify(window.gameState));
+        notify("Game saved!");
+      };
+      window.loadGame = () => {
+        const data = localStorage.getItem('simcityState');
+        if (data) {
+          window.gameState = JSON.parse(data);
+          if (typeof renderAll === 'function') renderAll();
+          notify("Game loaded!");
+        } else notify("No save found.");
+      };
+
+      // 4) Touch → Mouse mapping for mobile
+      const container = document.getElementById('game-container');
+      ['touchstart','touchmove','touchend'].forEach(evtName => {
+        container.addEventListener(evtName, e => {
+          e.preventDefault();
+          const t = e.changedTouches[0];
+          const mouseEvt = new MouseEvent(
+            evtName==='touchstart' ? 'mousedown' :
+            evtName==='touchmove'  ? 'mousemove' : 'mouseup',
+            { clientX:t.clientX, clientY:t.clientY, bubbles:true, cancelable:true }
+          );
+          container.querySelector('canvas').dispatchEvent(mouseEvt);
+        }, { passive:false });
+      });
+    });
+  </script>
+</body>
+</html>

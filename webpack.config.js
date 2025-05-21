@@ -7,12 +7,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlPlugin = require('script-ext-html-webpack-plugin');
 const StripAssertionCode = require('ts-transformer-unassert').default;
 
-const HANDLE_TYPESCRIPT_WITH_ATL = {test: /\.ts$/, loader: "awesome-typescript-loader"};
-
+const HANDLE_TYPESCRIPT_WITH_ATL = { test: /\.ts$/, loader: "awesome-typescript-loader" };
 const OUTPUT_DIRECTORY = 'dist';
 
 function recursivelyCopy(dir) {
-  return {from: dir, to: dir, toType: 'dir'};
+  return { from: dir, to: dir, toType: 'dir' };
 }
 
 function cleanUpLeftovers() {
@@ -20,14 +19,16 @@ function cleanUpLeftovers() {
 }
 
 function copyStaticAssets() {
-  return new CopyWebpackPlugin([
-    recursivelyCopy('css'),
-    recursivelyCopy('images'),
-    recursivelyCopy('sprites'),
-    recursivelyCopy('thirdparty'),
-    'LICENSE',
-    'COPYING',
-  ]);
+  return new CopyWebpackPlugin({
+    patterns: [
+      recursivelyCopy('css'),
+      recursivelyCopy('images'),
+      recursivelyCopy('sprites'),
+      recursivelyCopy('thirdparty'),
+      { from: 'LICENSE', to: '.', toType: 'file' },
+      { from: 'COPYING', to: '.', toType: 'file' },
+    ]
+  });
 }
 
 function injectBundleIntoHTML(gitHash) {
@@ -51,16 +52,11 @@ function injectBuildIdIntoAbout(gitHash) {
 }
 
 function deferInjectedBundle() {
-  return new ScriptExtHtmlPlugin({
-    defaultAttribute: 'defer'
-  });
+  return new ScriptExtHtmlPlugin({ defaultAttribute: 'defer' });
 }
 
 function addDevelopmentConfigTo(options) {
-  options.devServer = {
-    contentBase: `./${OUTPUT_DIRECTORY}`
-  };
-
+  options.devServer = { contentBase: `./${OUTPUT_DIRECTORY}` };
   options.devtool = 'source-maps';
   options.mode = 'development';
 }
@@ -68,40 +64,35 @@ function addDevelopmentConfigTo(options) {
 function addProductionConfigTo(options) {
   options.mode = 'production';
 
+  // strip TS assertions
   removeATLRuleFrom(options.module);
   const assertionStrippingConfig = {
     options: {
-      getCustomTransformers: () => {
-        return ({before: [StripAssertionCode]});
-      }
+      getCustomTransformers: () => ({ before: [StripAssertionCode] })
     }
   };
-  stripTSAssertionsRule = Object.assign(assertionStrippingConfig, HANDLE_TYPESCRIPT_WITH_ATL);
+  const stripTSAssertionsRule = Object.assign(assertionStrippingConfig, HANDLE_TYPESCRIPT_WITH_ATL);
   options.module.rules.push(stripTSAssertionsRule);
 }
 
 function removeATLRuleFrom(webpackModuleOptions) {
-  webpackModuleOptions.rules = webpackModuleOptions.rules.filter((rule) => rule !== HANDLE_TYPESCRIPT_WITH_ATL);
+  webpackModuleOptions.rules = webpackModuleOptions.rules.filter(rule => rule !== HANDLE_TYPESCRIPT_WITH_ATL);
 }
 
 function getBuildId() {
-  // Technically don't need to use the webpack plugin, as not passing it to Webpack...
   const gitPlugin = new GitRevisionPlugin({
     commitHashCommand: `log -1 --pretty=format:'%h' master`
   });
-
   return gitPlugin.commithash().slice(0, 12);
 }
 
 function commonOptions() {
   const buildId = getBuildId();
 
-  const options = {
+  return {
     entry: './src/micropolis.js',
     module: {
-      rules: [
-        HANDLE_TYPESCRIPT_WITH_ATL
-      ]
+      rules: [ HANDLE_TYPESCRIPT_WITH_ATL ]
     },
     output: {
       path: path.resolve(__dirname, OUTPUT_DIRECTORY),
@@ -115,16 +106,12 @@ function commonOptions() {
       deferInjectedBundle()
     ],
     resolve: {
-      extensions: [
-        ".js", ".json", ".ts"
-      ]
+      extensions: [ ".js", ".json", ".ts" ]
     }
   };
-
-  return options;
 }
 
-module.exports = function(env, argv) {
+module.exports = function(env /*, argv */) {
   const options = commonOptions();
 
   if (env.development) {

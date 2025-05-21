@@ -16,7 +16,7 @@
     "test:watch": "jest --watch",
     "lint": "tslint src/*.ts test/*.ts",
     "dev": "webpack-dev-server --env.development",
-    "production": "webpack-dev-server --env.production"
+    "production": "webpack-dev-server --env-production"
   },
   "devDependencies": {
     "@types/jest": "23.1.0",

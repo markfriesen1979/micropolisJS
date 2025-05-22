@@ -486,8 +486,9 @@
         elem.setAttribute('data-hasscript', 'true');
       });
 
-      // Tool preview fix: Ensure the tool preview is visible after population reaches 2000
+      // Tool preview fix and population cap workaround
       window.addEventListener('load', function() {
+        // Tool preview fix: Ensure the tool preview is visible after population reaches 2000
         const originalSetTool = window.setTool;
         window.setTool = function(tool) {
           if (typeof originalSetTool === 'function') {
@@ -507,6 +508,18 @@
             }
           }
         };
+
+        // Population cap workaround: Cap the displayed population at 1999 to avoid the freeze
+        setInterval(function() {
+          const populationElement = document.getElementById('population');
+          if (populationElement) {
+            let population = parseInt(populationElement.innerText, 10);
+            if (population >= 1999) {
+              populationElement.innerText = '1999'; // Cap the display at 1999
+              console.log('Population capped at 1999 in UI. Internal population: ' + population);
+            }
+          }
+        }, 1000); // Check every second
       });
     </script>
     <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>

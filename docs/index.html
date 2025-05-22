@@ -46,8 +46,10 @@
         pointer-events: none;
         display: none; /* Initially hidden */
       }
-      /* Hide the population display since it freezes at 2000 */
+      /* Hide the population number since it freezes at 2000 */
       #population { display: none; }
+      /* Hide the entire population section (including the "Population:" label) */
+      #infobar .elided:nth-child(6) { display: none; }
     </style>
   </head>
   <body>

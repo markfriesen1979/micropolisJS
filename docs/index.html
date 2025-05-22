@@ -18,10 +18,11 @@
     <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
     <title>micropolisJS</title>
     <style>
-      /* Added styles for the Back button */
+      /* Updated styles for the Back button */
       .back-button {
         position: absolute;
-        left: 10px;
+        left: 50%;
+        transform: translateX(-50%);
         top: 10px;
         padding: 5px 10px;
         background-color: #333;
@@ -45,7 +46,7 @@
     <img id="snowtiles" class="imageData" src="images/tilessnow.png" alt="These are the game's alternate tiles">
     <img id="sprites" class="imageData" src="images/sprites.png" alt="These are the game's sprites">
     <header id="header" class="chunk border-bottom padding10">
-      <a href="https://friesenventures.net/" class="back-button">Back</a>
+      <a href="https://friesenventures.net/" class="back-button">Click here to Return to Friesen Ventures Gaming Hub</a>
       <div class="left inlineblock">
         <h1 id="title" class="white fontlarge">micropolisJS</h1>
       </div>
@@ -263,7 +264,7 @@
               <dt class="evalItem statisticsItem">Category:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalClass"></dd>
               <dt class="evalItem statisticsItem">Game Level:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalLevel"></dd>
               <dt class="evalItem statisticsItem">Score:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalScore"></dd>
-              <dt class="evalItem statisticsItem">Annual change:</dt><dd class=" elided statisticsRight evalItem evalRight" id="evalScoreDelta"></dd>
+              <dt class="evalItem statisticsItem">Annual change:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalScoreDelta"></dd>
             </dl>
           </section>
           <form id="evalButtons" class="alignCenter margin10">
@@ -390,7 +391,6 @@
         <div id="screenshotContainer" class="padding10 open">
           <form id="screenshotForm" class="alignCenter margin10">
             <div id="screenshotContainerDiv">
-              Area to take picture of:
               <input type="radio" class="screenshotType" name="screenshotType" id="screenshotVisible" value="visible" checked="checked"><label for="screenshotVisible">Visible Map</label>
               <input type="radio" class="screenshotType" name="screenshotType" id="screenshotAll" value="all"><label for="screenshotAll">Full map</label>
             </div>

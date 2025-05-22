@@ -46,10 +46,10 @@
         pointer-events: none;
         display: none; /* Initially hidden */
       }
-      /* Hide the population number since it freezes at 2000 */
-      #population { display: none; }
-      /* Hide the entire population section (including the "Population:" label) */
-      #infobar .elided:nth-child(6) { display: none; }
+      /* Hide all notifications to prevent the population milestone pop-up at 2000 */
+      #notifications {
+        display: none !important;
+      }
     </style>
   </head>
   <body>

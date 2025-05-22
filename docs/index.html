@@ -17,49 +17,14 @@
     <meta name="description" content="Play micropolisJS and build a virtual city in your browser! micropolisJS is a handwritten HTML5/Javascript port of Micropolis, the open-source release of SimCity (the 1989 version).">
     <link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
     <title>micropolisJS</title>
-    <style>
-      /* Updated styles for the Back button */
-      .back-button {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        top: 10px;
-        padding: 5px 10px;
-        background-color: #333;
-        color: #0ff;
-        text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: bold;
-        border: 1px solid #0ff;
-        border-radius: 4px;
-        box-shadow: 0 0 5px #0ff;
-        transition: background-color 0.3s, color 0.3s;
-      }
-      .back-button:hover {
-        background-color: #0ff;
-        color: #000;
-      }
-      /* Styles for the tool preview */
-      #toolPreview {
-        position: absolute;
-        border: 2px dashed #0f0;
-        pointer-events: none;
-        display: none; /* Initially hidden */
-      }
-      /* Hide all notifications to prevent the population milestone pop-up at 2000 */
-      #notifications {
-        display: none !important;
-      }
-    </style>
   </head>
   <body>
     <img id="tiles" class="imageData" src="images/tiles.png" alt="These are the game's principal tiles">
     <img id="snowtiles" class="imageData" src="images/tilessnow.png" alt="These are the game's alternate tiles">
     <img id="sprites" class="imageData" src="images/sprites.png" alt="These are the game's sprites">
     <header id="header" class="chunk border-bottom padding10">
-      <a href="https://friesenventures.net/" class="back-button">Click here to Return to Friesen Ventures Gaming Hub</a>
       <div class="left inlineblock">
-        <h1 id="title" class="white fontlarge">Micropolis</h1>
+        <h1 id="title" class="white fontlarge">micropolisJS</h1>
       </div>
       <nav class="white right padding10 inlineblock">
         <ul>
@@ -70,12 +35,11 @@
     </header>
     <div id="wrapper">
       <main id="canvasContainer">
-        <div id="toolPreview"></div>
         <div class="hidden" id="opaque"></div>
         <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
         <div id="splash" class="mintcream awaitGeneration open shadow padding10 centred">
           <h2 class="chunk alignCenter">Welcome!</h2>
-          <p>Micropolis is a handmade Javascript port of the open-source city simulator <cite>Micropolis</cite></p>
+          <p>micropolisJS is a handmade Javascript port of the open-source city simulator <cite>Micropolis</cite></p>
           <div id="splashContainer"></div>
           <div id="splashButtonContainer">
             <div id="splashButtons">
@@ -189,7 +153,7 @@
           </div>
         </div>
         <div id="notifications" class="initialHidden neutral z1 rightedge alignCenter elided padding10 controlShadow"></div>
-        <div id="tooSmall" data-hasscript="false" class="mintcream open"><div id="tooSmallInner" class="alignCenter padding10"><h2 class="chunk">Uh-oh!</h2><p>This screen is too small—I won't be able to fit in all the controls, buttons and gizmos! Sorry!</p></div></div>
+        <div id="tooSmall" data-hasscript="false" class="mintcream open"><div id="tooSmallInner" class="alignCenter padding10"><h2 class="chunk">Uh-oh!</h2><p>This screen is too small&mdash;I won't be able to fit in all the controls, buttons and gizmos! Sorry!</p></div></div>
         <noscript>
           <div id="noscript" class="open mintcream centred padding10">
             <h1 class="chunk alignCenter">micropolisJS</h1>
@@ -199,7 +163,10 @@
         </noscript>
       </main>
       <footer id="footer" class="alignCenter chunk white padding10">
-        <div id="author" class="open">Game maintained by Mark Friesen</div>
+        Enjoyed micropolisJS? <a href="https://www.refuweegee.co.uk/your-donations">Click here to donate to a charity whose work I love!</a>
+        <div id="author" class="open">Brought to you by <a rel="author" href="http://www.graememcc.co.uk" target="_blank">Graeme McCutcheon</a><i><a rel="author" href="https://twitter.com/graememcc" target="_blank">(@graememcc)</a></i> and <a rel="author" href="https://github.com/graememcc/micropolisJS/graphs/contributors" target="_blank">contributors</a>
+          <div id="build">Build: <%= htmlWebpackPlugin.options.gitHash %></div>
+        </div>
       </footer>
       <div class="hidden modal shadow" id="budget">
         <header id="budgetHeader" class="budgetHeader padding10 chunk alignCenter">
@@ -273,9 +240,9 @@
               <dt class="evalItem statisticsItem">Category:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalClass"></dd>
               <dt class="evalItem statisticsItem">Game Level:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalLevel"></dd>
               <dt class="evalItem statisticsItem">Score:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalScore"></dd>
-              <dt class="evalItem statisticsItem">Annual change:</dt><dd class="elided statisticsRight evalItem evalRight" id="evalScoreDelta"></dd>
-            </dl>
-          </section>
+              <dt class="evalItem statisticsItem">Annual change:</dt><dd class=" elided statisticsRight evalItem evalRight" id="evalScoreDelta"></dd>
+	    </dl>
+	  </section>
           <form id="evalButtons" class="alignCenter margin10">
             <input type="submit" id="evalOK" class="width140 dialogOK" value="OK">
           </form>
@@ -352,14 +319,14 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+	        <tr>
                   <td id="queryTileBurnable"></td>
                   <td id="queryTileBulldozable"></td>
                   <td id="queryTileCond"></td>
                   <td id="queryTileAnim"></td>
                   <td id="queryTilePowered"></td>
-                  <td id="queryTileZone"></td>
-                </tr>
+		  <td id="queryTileZone"></td>
+	        </tr>
               </tbody>
             </table>
           </div>
@@ -368,7 +335,30 @@
           </form>
         </div>
       </div>
-     
+      <div class="hidden modal shadow" id="congratsWindow">
+        <header id="congratsHeader" class="congratsHeader padding10 chunk alignCenter">
+           Congratulations!
+        </header>
+        <div id="congratsContainer" class="padding10 open">
+          <div id="congratsMessage" class="alignCenter">Congratulations!</div>
+          <form id="congratsForm" class="alignCenter margin10">
+            <input type="submit" id="congratsOK" class="dialogOK" value="OK">
+          </form>
+        </div>
+      </div>
+      <div class="hidden modal shadow" id="nagWindow">
+        <header id="nagHeader" class="nagHeader padding10 chunk white alignCenter">
+           micropolisJS
+        </header>
+        <div id="nagContainer" class="padding10 open">
+          <div id="nagMessage" class="alignCenter">
+-            Whoa! You've been playing this thing for half an hour?!? This is the point I used to solicit donations, back when life was less kind. These days I'd prefer to see your money reach <a class="nag" href="https://www.refuweegee.co.uk/your-donations" target="_blank">Refuweegee</a>, a charity whose work I admire!
+          </div>
+          <form id="nagForm" class="alignCenter margin10">
+            <input type="submit" id="nagOK" class="dialogOK" value="OK">
+          </form>
+        </div>
+      </div>
       <div class="hidden modal shadow" id="saveWindow">
         <header id="saveHeader" class="saveHeader padding10 chunk alignCenter">
           Save
@@ -423,8 +413,8 @@
               </div>
               <div id="autoBulldozeSelect" class="padding10">
                 Autobulldoze:
-                <input type="radio" class="autoBulldozeSetting" name="autoBudgetSetting" id="autoBulldozeYes" value="true" checked="checked"><label for="autoBulldozeYes">Yes</label>
-                <input type="radio" class="autoBulldozeSetting" name="autoBudgetSetting" id="autoBulldozeNo" value="false"><label for="autoBulldozeNo">No</label>
+                <input type="radio" class="autoBulldozeSetting" name="autoBulldozeSetting" id="autoBulldozeYes" value="true" checked="checked"><label for="autoBulldozeYes">Yes</label>
+                <input type="radio" class="autoBulldozeSetting" name="autoBulldozeSetting" id="autoBulldozeNo" value="false"><label for="autoBulldozeNo">No</label>
               </div>
               <div id="speedSelect" class="padding10">
                 Speed:
@@ -469,7 +459,7 @@
              It seems you're using a touchscreen device!
           </p>
           <p class="padding10">
-            Just to warn you, micropolisJS isn't really geared towards touch devices—I don't own a tablet—so you might be in for a bad time.
+            Just to warn you, micropolisJS isn't really geared towards touch devices&mdash;I don't own a tablet&mdash;so you might be in for a bad time.
           </p>
           <p class="padding10">
             However, if you're wanting to give it a shot, I won't stop you!
@@ -485,44 +475,4 @@
       [].forEach.call(document.querySelectorAll('[data-hasscript]'), function(elem) {
         elem.setAttribute('data-hasscript', 'true');
       });
-
-      // Tool preview fix and population cap workaround
-      window.addEventListener('load', function() {
-        // Tool preview fix: Ensure the tool preview is visible after population reaches 2000
-        const originalSetTool = window.setTool;
-        window.setTool = function(tool) {
-          if (typeof originalSetTool === 'function') {
-            originalSetTool(tool);
-          } else {
-            console.warn('setTool function not found. Tool preview may not work.');
-          }
-          const populationElement = document.getElementById('population');
-          const population = parseInt(populationElement.innerText, 10);
-          if (population >= 2000) {
-            const toolPreview = document.getElementById('toolPreview');
-            if (toolPreview) {
-              toolPreview.style.display = 'block';
-              console.log('Tool preview set to visible at population ' + population);
-            } else {
-              console.error('Tool preview element not found.');
-            }
-          }
-        };
-
-        // Population cap workaround: Cap the displayed population at 1999 to avoid the freeze
-        setInterval(function() {
-          const populationElement = document.getElementById('population');
-          if (populationElement) {
-            let population = parseInt(populationElement.innerText, 10);
-            if (population >= 1999) {
-              populationElement.innerText = '1999'; // Cap the display at 1999
-              console.log('Population capped at 1999 in UI. Internal population: ' + population);
-            }
-          }
-        }, 1000); // Check every second
-      });
-    </script>
-    <script defer src="thirdparty/jquery/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="src/micropolis.js?f2dcf3e190bdf59fa9c2" defer></script>
-  </body>
-</html>
+    </script
